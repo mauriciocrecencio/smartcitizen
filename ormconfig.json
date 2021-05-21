@@ -6,13 +6,9 @@
   "password": "root",
   "database": "smartcitizen",
   "logging": true,
-  "entities": [
-      "src/entities/*.ts"
-  ],
-  "migrations": [
-      "src/migrations/*.ts"
-  ],
+  "entities": ["./src/entities/**/*.ts"],
+  "migrations": ["./src/migrations/**/*.ts"],
   "cli": {
-      "migrationsDir": "src/migrations/*.ts"
+    "migrationsDir": "./src/migrations"
   }
 }
