@@ -1,57 +1,72 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import User from "../entities/User";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import UserRepository from "../repositories/UserRepository";
 class UserController {
   async create(req: Request, res: Response) {
-    const repository = getRepository(User);
-    const { email, password } = req.body;
-
-    const userExists = await repository.findOne({ where: { email } });
+    const { name, email, password } = req.body;
+    const userRepository = new UserRepository();
+    const userExists = await userRepository.findByEmail(email);
 
     if (userExists) {
-      return res.sendStatus(409);
+      return res.status(409).json({ message: "This email has already been registered" });
     }
 
-    const user = repository.create({ email, password });
-    await repository.save(user);
-    return res.json(user);
+    const user = await userRepository.createUser(name, email, String(password));
+    return res.status(200).json({ user });
+  }
+
+  async update(req: Request, res: Response) {
+    const userRepository = new UserRepository();
+    const { id } = req;
+    const userExists = await userRepository.findById(id);
+    if (!userExists) {
+      return res.status(409).json({ message: "No user found" });
+    }
+    const { email, password, name } = req.body;
+    const updatedUser = await userRepository.updateUser({ email, password, name }, userExists);
+
+    return res.json(updatedUser);
   }
 
   async get(req: Request, res: Response) {
-    const repository = getRepository(User);
-    const { id } = req.params;
-
-    const userExists = await repository.findOne({ where: { id } });
-    if (!userExists) {
-      return res.sendStatus(400);
+    const userRepository = new UserRepository();
+    const user = await userRepository.findById(req.params.id);
+    if (!user) {
+      return res.status(400).json({ message: "No user found" });
     }
-    return res.json(userExists);
+    return res.status(200).json({ user });
+  }
+
+  async delete(req: Request, res: Response) {
+    const userRepository = new UserRepository();
+    const idOfUserRequest = req.id;
+    const userIdToBeDeleted = req.params.id;
+    if (idOfUserRequest !== userIdToBeDeleted) {
+      return res.status(400).json({ message: "You cannot delete others users!" });
+    }
+    const user = await userRepository.deleteUserById(userIdToBeDeleted);
+    if (!user) {
+      return res.status(400).json({ message: "No user found" });
+    }
+    return res.status(200).json({ message: "User successfully deleted" });
   }
 
   async login(req: Request, res: Response) {
-    const repository = getRepository(User);
+    const userRepository = new UserRepository();
     const { email, password } = req.body;
 
-    const user = await repository.findOne({ where: { email } });
+    const userExists = await userRepository.findByEmail(email);
 
-    if (!user) {
-      return res.sendStatus(401);
+    if (!userExists) {
+      return res.status(400).json({ message: "No user found" });
     }
+    const isValidPassword = await userRepository.checkPassword(password, userExists);
 
-    const isValidPassword = await bcrypt.compare(String(password), String(user.password));
     if (!isValidPassword) {
-      return res.sendStatus(401);
+      return res.status(401).json({ message: "Incorrect password" });
     }
-
     // Tem que colocar no .env
-    const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "1d" });
-    delete user.password;
-    return res.json({
-      user,
-      token,
-    });
+    const userLogged = await userRepository.login(email);
+    return res.status(201).json(userLogged);
   }
 }
 
