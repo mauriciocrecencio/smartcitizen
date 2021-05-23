@@ -21,6 +21,6 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
     req.id = id;
     next();
   } catch {
-    return res.status(401).json({ message: "Incorrect password" });
+    return res.status(401).json({ message: "Incorrect password or token authentication" });
   }
 }
