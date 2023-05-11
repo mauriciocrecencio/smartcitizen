@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
+    "start": "node build/server.js",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "typeorm": "npx ts-node ./node_modules/typeorm/cli.js",
-    "build": "tsc"
+    "build": "tsup src --out-dir build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -22,6 +22,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "pg": "^8.10.0",
     "ts-node-dev": "^2.0.0",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   }
 }

@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import express from "express";
 import "./database";
 import usersRoutes from "./routes/users.routes";
