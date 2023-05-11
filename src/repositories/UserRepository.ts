@@ -1,16 +1,16 @@
-import { EntityRepository, getRepository, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { IUser } from "../interfaces/IUser";
 import User from "../models/User";
 import IUserRepository from "./IUserRepository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { AppDataSource } from "../data-source";
 
-@EntityRepository(User)
-class UserRepository implements IUserRepository {
+export class UserRepository implements IUserRepository {
   private ormRepository: Repository<User>;
 
   constructor() {
-    this.ormRepository = getRepository(User);
+    this.ormRepository = AppDataSource.getRepository(User);
   }
 
   public async findById(id: string): Promise<User | undefined> {

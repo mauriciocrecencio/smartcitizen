@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import UserRepository from "../repositories/UserRepository";
+import {UserRepository} from "../repositories/UserRepository";
 class UserController {
   async create(req: Request, res: Response) {
     const { name, email, password } = req.body;
@@ -64,7 +64,6 @@ class UserController {
     if (!isValidPassword) {
       return res.status(401).json({ message: "Incorrect password" });
     }
-    // Tem que colocar no .env
     const userLogged = await userRepository.login(email);
     return res.status(201).json(userLogged);
   }

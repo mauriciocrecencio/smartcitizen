@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } fr
 import bcrypt from "bcryptjs";
 
 @Entity("users")
-class User {
+export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

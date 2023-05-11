@@ -1,3 +1,7 @@
-import { createConnection } from "typeorm";
+import { AppDataSource } from "../data-source"
 
-createConnection().then(() => console.log("Successfully connected with Database"));
+AppDataSource.initialize()
+    .then(() => {
+      console.log("Successfully connected to Database")
+    })
+    .catch((error) => console.log(error))
