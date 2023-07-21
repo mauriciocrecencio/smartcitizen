@@ -7,10 +7,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "node build/server.js",
+    "start": "node public/server.js",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts",
     "typeorm": "npx ts-node ./node_modules/typeorm/cli.js",
-    "build": "tsup src --out-dir build"
+    "build": "tsup src --out-dir public"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
