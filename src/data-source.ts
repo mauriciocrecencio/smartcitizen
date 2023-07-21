@@ -19,7 +19,7 @@ export const AppDataSource = new DataSource({
     // database: process.env.POSTGRES_DB || "auth_users",
     // synchronize: true,
     // logging: true,
-    // entities: [User],
+    entities: [User],
     // subscribers: [],
     // migrations: [],
 })
