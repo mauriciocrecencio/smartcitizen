@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
     // username: process.env.POSTGRES_USER || "docker",
     // password: process.env.POSTGRES_PASSWORD || "docker",
     // database: process.env.POSTGRES_DB || "auth_users",
-    // synchronize: true,
+    synchronize: true,
     // logging: true,
     entities: [User],
     // subscribers: [],
