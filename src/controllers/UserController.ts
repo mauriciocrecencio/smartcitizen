@@ -11,6 +11,7 @@ class UserController {
     }
 
     const user = await userRepository.createUser(name, email, String(password));
+    res.statusMessage = "OK"
     return res.status(200).json({ user });
   }
 
@@ -65,6 +66,8 @@ class UserController {
       return res.status(401).json({ message: "Incorrect password" });
     }
     const userLogged = await userRepository.login(email);
+
+    res.statusMessage = "Created"
     return res.status(201).json(userLogged);
   }
 }
